@@ -11,16 +11,46 @@ MySQL 8.1 버전을 사용했습니다.
 * `username`: 유저네임
 * `createdAt`: User 생성 시간
 
+```mysql
+create table Users
+(
+    id         bigint auto_increment
+        primary key,
+    created_at datetime(6) not null,
+    name       varchar(50) not null,
+    username   varchar(50) not null
+);
+```
+
 ### Pages
 
 * `id`: Primary key
 * `userId`: index
 * `url`: Page URL
 * `title`: Page title
-* `scope`: 공개 범위
+* `scope`: index 공개 범위
     * public, mentioned, private
 * `mentioned`: 맨션한 userIds
 * `createdAt`: 최초로 하이라이트한 시간
+
+```mysql
+create table Pages
+(
+    id         bigint auto_increment
+        primary key,
+    created_at datetime(6)  not null,
+    user_id    bigint       not null,
+    url        varchar(256) not null,
+    title      varchar(256) not null,
+    scope      varchar(10)  not null
+);
+
+create index Pages_scope
+    on Pages (scope);
+
+create index Pages_user_id
+    on Pages (user_id);
+```
 
 ### Mentions
 
@@ -28,12 +58,46 @@ MySQL 8.1 버전을 사용했습니다.
 * `pageId`: index
 * `mentionUserId`: index
 
+```mysql
+create table Mentions
+(
+    id              bigint auto_increment
+        primary key,
+    created_at      datetime(6) not null,
+    page_id         bigint      not null,
+    mention_user_id bigint      not null
+);
+
+create index Mentions_mention_user_id
+    on Mentions (mention_user_id);
+
+create index Mentions_page_id
+    on Mentions (page_id);
+```
+
 ### Highlights
 
 * `id`: Primary key
 * `pageId`: index
 * `color`: 하이라이트된 색상
 * `text`: 하이라이트된 텍스트
+
+```mysql
+create table Highlights
+(
+    id         bigint auto_increment
+        primary key,
+    created_at datetime(6) not null,
+    page_id    bigint      not null,
+    color      varchar(10) not null,
+    text       text        not null
+);
+
+create index Highlights_page_id
+    on Highlights (page_id);
+
+
+```
 
 ## 쿼리 플랜
 
