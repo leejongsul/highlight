@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql
+    container_name: highlight-mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_ROOT_PASSWORD: qwer1234!
+      MYSQL_DATABASE: highlight
+      MYSQL_USER: highlight
+      MYSQL_PASSWORD: qwer1234!
